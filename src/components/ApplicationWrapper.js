@@ -1,44 +1,51 @@
 import React from 'react';
 import {render} from 'react-dom';
+import CurrencyForm from './CurrencyForm.js';
+import ResultContainer from './ResultContainer.js';
 
 function makeApiCall() {
-    var myHeaders = new Headers({
-        "Cookie":"preferredLanguage=hu; cookie.ECB=!P3JfCfllLvsn+AzViMJddZBG69fgZQYMDXXNkMmRerok9Cl2XYuZEXZhdSqbHRAgj3Jf52md5U2IvZY=",
-        "Host":"www.ecb.europa.eu",
-        "If-None-Match":"120f5-547a177fe1400",
-        "Upgrade-Insecure-Requests":"1"
-    });
-
-    var myInit = {
-        method: 'GET',
-        headers: myHeaders,
-        mode:'opaque'
-    };
-    var url = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml";
-    return fetch(url, myInit);
+    var url = "http://localhost:3000/getrates";
+    return fetch(url);
 }
 
 var ApplicationWrapper = React.createClass({
 
-    loadCurrency: function(name) {
+    loadCurrency: function(from, to) {
         makeApiCall().then(function(response) {
             if (!response.ok) {
                 throw Error(response.statusText);
             }
             return response;
         }).then(function(response) {
-            console.log(response);
-            // response.json().then(function(json) {
-            //     console.log(json)
-            //     this.setState({
-            //         data: json,
-            //     });
-            //     console.log(this.state);
-            // }.bind(this));
+            response.json().then(function(json) {
+                this.setState({
+                    data: json,
+                    from: from,
+                    to: to,
+                    result: this.convertCurrency(json, from, to)
+                });
+                console.log(this.state);
+            }.bind(this));
         }.bind(this))
             .catch(function(error) {
                 console.log(error);
             }.bind(this));
+    },
+
+    convertCurrency: function(rates, from, to) {
+        var result = 0;
+        if (rates.response && from && to) {
+            var latestRates = rates.response[0].Cube;
+            var fromLatestRates = latestRates.filter(function(el) {
+                return el.currency === from.currency;
+            });
+            var toLatestRates = latestRates.filter(function(el) {
+                return el.currency === to.currency;
+            });
+            result = parseFloat(from.value) * (parseFloat(toLatestRates[0].rate) / parseFloat(fromLatestRates[0].rate));
+
+        }
+        return parseFloat(result).toFixed(2);
     },
 
     init: function(){
@@ -49,13 +56,18 @@ var ApplicationWrapper = React.createClass({
         this.init();
         return {
             data: [],
+            from: '',
+            to: '',
+            result: ''
         };
     },
 
   	render: function() {
+
     	return( 
 	    	<div className="applicationWrapper container-fluid">
-
+                <CurrencyForm Data={this.state.data} onSubmitForm={this.loadCurrency} />
+                <ResultContainer Result={this.state.result} /> 
 	    	</div>);
 		}
 });

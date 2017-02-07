@@ -8,7 +8,7 @@ var currencyExchange = function(app) {
             if (!error && response.statusCode == 200) {
                 var json = parser.toJson(body);
                 res.status(200).json({
-                    response: JSON.parse(json)
+                    response: JSON.parse(json)['gesmes:Envelope'].Cube.Cube
                 });
             }
             if (error) {
