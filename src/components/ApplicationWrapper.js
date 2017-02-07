@@ -2,6 +2,7 @@ import React from 'react';
 import {render} from 'react-dom';
 import CurrencyForm from './CurrencyForm.js';
 import ResultContainer from './ResultContainer.js';
+import GraphContainer from './GraphContainer.js';
 
 function makeApiCall() {
     var url = "http://localhost:3000/getrates";
@@ -67,7 +68,8 @@ var ApplicationWrapper = React.createClass({
     	return( 
 	    	<div className="applicationWrapper container-fluid">
                 <CurrencyForm Data={this.state.data} onSubmitForm={this.loadCurrency} />
-                <ResultContainer Result={this.state.result} /> 
+                <ResultContainer Result={this.state.result} />
+                <GraphContainer Data={this.state.data} />  
 	    	</div>);
 		}
 });
