@@ -6,27 +6,26 @@ var GraphContainer = React.createClass({
     componentDidMount: function() {
         this.graph = new Rickshaw.Graph({
             element: document.querySelector("#chart"),
-            width: 300,
+            width: 500,
             height: 200,
+            renderer: "bar",
             series: [{
                 color: 'steelblue',
-                data: [{
-                    x: 0,
-                    y: 40
-                }, {
-                    x: 1,
-                    y: 49
-                }, {
-                    x: 2,
-                    y: 38
-                }, {
-                    x: 3,
-                    y: 30
-                }, {
-                    x: 4,
-                    y: 32
-                }]
+                data: [{ x: 0, y: 0 }],
+
             }]
+        });
+
+        var hoverDetail = new Rickshaw.Graph.HoverDetail({
+            graph: this.graph,
+            // formatter: function(series, x, y) {
+            //     var date = '<span class="date">ASDASDASDASDasd</span>';
+            //     var content = date;
+            //     return content;
+            // },
+            xFormatter: function(x) {
+                return "";
+            },
         });
         this.graph.render();
     },
@@ -38,26 +37,37 @@ var GraphContainer = React.createClass({
         }
         return node;
     },
+
+    mapHistory: function(currency, data) {
+        var mapped = []
+        if (this.props.Data.response) {
+            mapped = this.props.Data.response.map(function(el, index) {
+                var obj = {}
+                obj.time = el.time;
+                obj.value = el.Cube.filter(function(el) {
+                    return el.currency === currency;
+                })[0].rate;
+                return obj;
+            });
+        }
+        return mapped;
+    },
     change: function(event) {
-        console.log({
-            value: event.target.value
+
+        var graphData = this.mapHistory(event.target.value, this.props.Data);
+        graphData = graphData.map(function(el, index) {
+            return {
+                x: index,
+                y: parseFloat(el.value),
+                t: el.time
+            };
         });
-        this.graph.series[0].data = [{
-            x: 0,
-            y: 10
-        }, {
-            x: 1,
-            y: 20
-        }, {
-            x: 2,
-            y: 30
-        }, {
-            x: 3,
-            y: 40
-        }, {
-            x: 4,
-            y: 50
-        }]
+        console.log(graphData)
+
+        this.graph.series[0].data = graphData;
+        this.graph.series[0].name = event.target.value;
+
+    
         this.graph.update();
     },
      
