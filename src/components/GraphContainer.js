@@ -3,32 +3,32 @@ import {render} from 'react-dom';
 import Rickshaw from 'rickshaw';
 
 var GraphContainer = React.createClass({
+
+    componentWillReceiveProps: function(nextProps) {
+        this.updateChart("USD",nextProps.Data);    
+    },
+
     componentDidMount: function() {
         this.graph = new Rickshaw.Graph({
             element: document.querySelector("#chart"),
             width: 500,
             height: 200,
-            renderer: "bar",
+            min: "auto",
+            renderer: "line",
             series: [{
                 color: 'steelblue',
-                data: [{ x: 0, y: 0 }],
-
+                data: [],
             }]
         });
 
         var hoverDetail = new Rickshaw.Graph.HoverDetail({
             graph: this.graph,
-            // formatter: function(series, x, y) {
-            //     var date = '<span class="date">ASDASDASDASDasd</span>';
-            //     var content = date;
-            //     return content;
-            // },
             xFormatter: function(x) {
-                return "";
-            },
+                return this.graph.series[0].data[x].t;
+            }.bind(this)
         });
-        this.graph.render();
     },
+
     getCurrencyList: function(data) {
         if(data.response){
             var node = data.response[0].Cube.map(function(part, index) {
@@ -38,10 +38,27 @@ var GraphContainer = React.createClass({
         return node;
     },
 
+    change: function(event) {
+        event = event || {target:{value:"USD"}};
+        this.updateChart(event.target.value,this.props.Data)
+    },
+
+    updateChart:function(currency,data){
+        if (data.response) {
+            var graphData = this.mapHistory(currency, data);
+            this.graph.series[0].data = graphData;
+            this.graph.series[0].name = currency;
+            var min = graphData.reduce(function(p, v) {
+                return (p.y < v.y ? p.y : v.y);
+            });
+            this.graph.update();
+        }
+    },
+
     mapHistory: function(currency, data) {
         var mapped = []
-        if (this.props.Data.response) {
-            mapped = this.props.Data.response.map(function(el, index) {
+        if (data.response) {
+            mapped = data.response.map(function(el, index) {
                 var obj = {}
                 obj.time = el.time;
                 obj.value = el.Cube.filter(function(el) {
@@ -50,36 +67,25 @@ var GraphContainer = React.createClass({
                 return obj;
             });
         }
-        return mapped;
-    },
-    change: function(event) {
-
-        var graphData = this.mapHistory(event.target.value, this.props.Data);
-        graphData = graphData.map(function(el, index) {
+        mapped = mapped.map(function(el, index) {
             return {
                 x: index,
                 y: parseFloat(el.value),
                 t: el.time
             };
         });
-        console.log(graphData)
-
-        this.graph.series[0].data = graphData;
-        this.graph.series[0].name = event.target.value;
-
-    
-        this.graph.update();
+        return mapped;
     },
-     
+
   	render: function() {
 
   		var node = this.getCurrencyList(this.props.Data);
     	return( 
 	    	<div className="graphContainerWrapper">
                 <div className="currencies">
-                    <select ref="currency" onChange={this.change}>{node}</select>
+                    <select id="dd" ref="currency" onChange={this.change} className="selectBox" >{node}</select>
                 </div>
-                <div id="chart"></div>
+                <div id="chart" className="chartContainer"></div>
 	    	</div>);
 		}
 });

@@ -4,7 +4,6 @@ import {render} from 'react-dom';
 var CurrencyForm = React.createClass({
      
     handleSubmit: function() {
-        console.log("Submit pressed reloading the data from server...");
         var from = {
             value: this.refs.from.value.trim(),
             currency: this.refs.from_currency.value.trim()
@@ -12,7 +11,8 @@ var CurrencyForm = React.createClass({
         var to = {
             currency: this.refs.to_currency.value.trim()
         };
-        this.props.onSubmitForm(from, to);
+        if(from.value.length>0) this.props.onSubmitForm(from, to);
+
         return false;
     },
  
@@ -32,11 +32,11 @@ var CurrencyForm = React.createClass({
                 <div className="convertForm">
                     <input type="text" className="textBox" placeholder="From" ref="from" />
                     <div className="fromCurrency">
-                        <select ref="from_currency">{node}</select>
+                        <select className="selectBox" ref="from_currency">{node}</select>
                     </div>
                     <div className="to">to</div>
                     <div className="toCurrency">
-                        <select ref="to_currency">{node}</select>
+                        <select className="selectBox" ref="to_currency">{node}</select>
                     </div>
                     <input type="submit" value="Convert" className="convertBtn" onClick={this.handleSubmit} />
                 </div>

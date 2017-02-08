@@ -66,10 +66,16 @@ var ApplicationWrapper = React.createClass({
   	render: function() {
 
     	return( 
-	    	<div className="applicationWrapper container-fluid">
-                <CurrencyForm Data={this.state.data} onSubmitForm={this.loadCurrency} />
-                <ResultContainer Result={this.state.result} />
-                <GraphContainer Data={this.state.data} />  
+	    	<div className="applicationWrapper container">
+                <div className="row">
+                    <CurrencyForm Data={this.state.data} onSubmitForm={this.loadCurrency} />
+                </div>
+                <div className="row">
+                    <ResultContainer Result={this.state.result} />
+                </div>
+                <div className="row">
+                    <GraphContainer Data={this.state.data} />
+                </div>  
 	    	</div>);
 		}
 });

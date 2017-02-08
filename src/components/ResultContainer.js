@@ -6,7 +6,7 @@ var ResultContainer = React.createClass({
   	render: function() {
     	return( 
 	    	<div className="resultContainerWrapper">
-                {this.props.Result}
+                Result: {this.props.Result}
 	    	</div>);
 		}
 });

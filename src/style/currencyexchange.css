@@ -1,0 +1,73 @@
+input[type='text'] { 
+    font-size: 20px;
+    font-style: normal;
+    padding-left: 10px;
+    width:150px;
+    margin-right: 10px;
+}
+input[type=submit] {
+    font-size: 20px;
+    font-style: normal;
+    padding-left: 10px;
+    background-color: #ffffff;
+    color: #000000;
+}
+select {
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+   font-size: 20px;
+   font-style: normal;
+   padding-left: 10px;
+   background-color: #ffffff;
+   color: #000000;
+   margin-right: 10px;
+}
+.applicationWrapper{
+	padding:10px;
+}
+.graphContainerWrapper{
+	width: 500px;
+	margin-top: 10px;
+}
+.resultContainerWrapper{
+	font-size: 20px;
+    font-style: normal;
+    padding-left: 10px;
+    background-color: #ffffff;
+    color: #000000;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 50px;
+    width: 500px;
+}
+.currencyFormWrapper{
+	width: 500px;
+}
+.textBox{
+    width: 100px;
+}
+.to{
+	display: inline-block;
+	font-size: 20px;
+    font-style: normal;
+    background-color: #ffffff;
+    color: #000000;
+    margin-right: 10px;
+}
+.selectBox{
+	width: 100px;
+}
+.convertBtn{
+
+}
+.chartContainer{
+	margin-top: 20px;
+}
+.fromCurrency{
+    display: inline-block;	
+}
+.toCurrency{
+	display: inline-block;
+}
