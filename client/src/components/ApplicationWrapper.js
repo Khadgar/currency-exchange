@@ -5,7 +5,7 @@ import ResultContainer from './ResultContainer.js';
 import GraphContainer from './GraphContainer.js';
 
 function makeApiCall() {
-  var url = "http://localhost/getrates";
+  var url = "http://currency-exchanger.herokuapp.com/getrates";
   return fetch( url );
 }
 
