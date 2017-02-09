@@ -5,7 +5,7 @@ import Rickshaw from 'rickshaw';
 var GraphContainer = React.createClass( {
 
   componentWillReceiveProps: function ( nextProps ) {
-    this.updateChart( "USD", nextProps.Data );
+    this.updateChart( nextProps.selectedCurrency, nextProps.Data );
   },
 
   componentDidMount: function () {
@@ -43,10 +43,12 @@ var GraphContainer = React.createClass( {
   },
 
   change: function ( event ) {
-    this.updateChart( event.target.value, this.props.Data )
+    this.props.onSelectCurrency(event.target.value);
+    this.updateChart( this.props.selectedCurrency, this.props.Data )
   },
 
   updateChart: function ( currency, data ) {
+
     if ( data.response ) {
       var graphData = this.mapHistory( currency, data );
       this.graph.series[0].data = graphData;
@@ -54,6 +56,7 @@ var GraphContainer = React.createClass( {
       var min = graphData.reduce( function ( p, v ) {
         return (p.y < v.y ? p.y : v.y);
       } );
+      
       this.graph.update();
     }
   },

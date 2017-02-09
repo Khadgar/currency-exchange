@@ -23,7 +23,7 @@ var ApplicationWrapper = React.createClass( {
           data: json,
           from: from,
           to: to,
-          result: this.convertCurrency( json, from, to )
+          result: this.convertCurrency( json, from, to ),
         } );
         console.log( this.state );
       }.bind( this ) );
@@ -53,13 +53,18 @@ var ApplicationWrapper = React.createClass( {
     this.loadCurrency();
   },
 
+  setSelectedCurrencyView:function(item){
+      this.setState({selected:item});
+  },
+
   getInitialState: function () {
     this.init();
     return {
       data: [],
       from: '',
       to: '',
-      result: ''
+      result: '',
+      selected:'USD'
     };
   },
 
@@ -74,7 +79,7 @@ var ApplicationWrapper = React.createClass( {
         <ResultContainer Result={ this.state.result } />
       </div>
       <div className="row">
-        <GraphContainer Data={ this.state.data } />
+        <GraphContainer Data={ this.state.data } onSelectCurrency = {this.setSelectedCurrencyView} selectedCurrency={this.state.selected} />
       </div>
     </div>);
   }

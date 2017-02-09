@@ -9830,13 +9830,18 @@ var ApplicationWrapper = _react2.default.createClass({
     this.loadCurrency();
   },
 
+  setSelectedCurrencyView: function setSelectedCurrencyView(item) {
+    this.setState({ selected: item });
+  },
+
   getInitialState: function getInitialState() {
     this.init();
     return {
       data: [],
       from: '',
       to: '',
-      result: ''
+      result: '',
+      selected: 'USD'
     };
   },
 
@@ -9858,7 +9863,7 @@ var ApplicationWrapper = _react2.default.createClass({
       _react2.default.createElement(
         'div',
         { className: 'row' },
-        _react2.default.createElement(_GraphContainer2.default, { Data: this.state.data })
+        _react2.default.createElement(_GraphContainer2.default, { Data: this.state.data, onSelectCurrency: this.setSelectedCurrencyView, selectedCurrency: this.state.selected })
       )
     );
   }
@@ -10059,7 +10064,7 @@ var GraphContainer = _react2.default.createClass({
 
 
   componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-    this.updateChart("USD", nextProps.Data);
+    this.updateChart(nextProps.selectedCurrency, nextProps.Data);
   },
 
   componentDidMount: function componentDidMount() {
@@ -10097,10 +10102,12 @@ var GraphContainer = _react2.default.createClass({
   },
 
   change: function change(event) {
-    this.updateChart(event.target.value, this.props.Data);
+    this.props.onSelectCurrency(event.target.value);
+    this.updateChart(this.props.selectedCurrency, this.props.Data);
   },
 
   updateChart: function updateChart(currency, data) {
+
     if (data.response) {
       var graphData = this.mapHistory(currency, data);
       this.graph.series[0].data = graphData;
@@ -10108,6 +10115,7 @@ var GraphContainer = _react2.default.createClass({
       var min = graphData.reduce(function (p, v) {
         return p.y < v.y ? p.y : v.y;
       });
+
       this.graph.update();
     }
   },
