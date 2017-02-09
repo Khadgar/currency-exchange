@@ -9782,7 +9782,7 @@ var _GraphContainer2 = _interopRequireDefault(_GraphContainer);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function makeApiCall() {
-  var url = "http://localhost:3000/getrates";
+  var url = "http://currency-exchanger.herokuapp.com/getrates";
   return fetch(url);
 }
 
