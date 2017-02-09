@@ -1,9 +1,13 @@
 # currency-exchange
+This application uses [euroxref](http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml) to convert currency and show historical data.
+* Server: nodejs
+* Client: reactjs (built with webpack)
 
-dependencies:
-node-gyp (https://github.com/nodejs/node-gyp)
-
-1. npm install
-2. start server (node app.js) http://localhost:3000/getrates rest call returns the http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml in json format
-3. build client (npm run build)
-4. start index.html
+[live demo](http://currency-exchanger.herokuapp.com/)
+## Requirements:
+nodejs, npm, [node-gyp](https://github.com/nodejs/node-gyp)
+## How-To install
+1. install dependecies `npm install`
+2. build client `npm run build`
+3. start application `node app.js` 
+4. open http://localhost:3000 in browser (Chrome or Firefox)
