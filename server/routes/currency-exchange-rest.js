@@ -1,7 +1,7 @@
 var request = require('request');
 var parser = require('xml2json');
 
-var currencyExchange = function(app) {
+var currencyExchange = function(app, indexPath) {
     app.get('/getrates', function(req, res) {
 
         request('http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml', function(error, response, body) {
@@ -17,6 +17,10 @@ var currencyExchange = function(app) {
                 });
             }
         });
+    });
+
+    app.get('/', function(_, res) {
+        res.sendFile(indexPath);
     });
 };
 
