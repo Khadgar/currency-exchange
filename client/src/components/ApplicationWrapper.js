@@ -5,7 +5,7 @@ import ResultContainer from './ResultContainer.js';
 import GraphContainer from './GraphContainer.js';
 
 function makeApiCall() {
-  var url = "http://localhost:3000/getrates";
+  var url = "http://localhost/getrates";
   return fetch( url );
 }
 
